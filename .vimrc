@@ -1,60 +1,53 @@
-"bundle/
-"nerdtree      python-mode   vim-airline   vim-fugitive  vim-gitgutter vim-gocode    vim-golang
+set shell=bash
 
-"colors/
-"candy.vim      jellybeans.vim vividchalk.vim wombat.vim
+execute pathogen#infect()
 
-call pathogen#infect()
-call pathogen#helptags()
+" Various settings copied from blog posts
 syntax on
 filetype plugin indent on
-set nu
-"autocmd vimenter * NERDTree
-set guifont=Monaco:h12
-"colorscheme vividchalk
 colorscheme jellybeans
-let NERDTreeIgnore = ['\.pyc$']
-
+set nu
+autocmd BufWritePre * :%s/\s\+$//e
+set viminfo='100,\"2500,:200,%,n~/.viminfo
 set expandtab
 set shiftwidth=2
 set softtabstop=2
 set ts=4
 set completeopt=preview,longest,menuone
 
-set rtp+=$GOROOT/misc/vim
+let g:pymode_python = 'python3'
+let g:ycm_autoclose_preview_window_after_completion=1
 
-" disable complete on dot for python.
-let g:pymode_rope_complete_on_dot = 0
+" snippets
+let g:UltiSnipsUsePythonVersion = 2
+let g:UltiSnipsExpandTrigger="<C-Space>"
+let g:UltiSnipsJumpForwardTrigger="<Right>"
+let g:UltiSnipsJumpBackwardTrigger="<Left>"
 
 " airline settings
-let g:airline_left_sep = '▶ '
-let g:airline_right_sep = '◀ '
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
 let g:airline_linecolumn_prefix = '¶ '
 let g:airline_fugitive_prefix = '⎇ '
-let g:golang_goroot = "/usr/local/go"
 
-" linter status
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+"statusline
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
-" transparency
-" set transparency=5
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_go_checkers = ['go', 'golint', 'errcheck']
 
-" hard tabs width
+" NERDTree
+let NERDTreeIgnore = ['\.pyc$']
+nmap ` :NERDTreeToggle<Enter>
 
-" NERDTree shortcuts
-nmap § :NERDTreeToggle<Enter>
-nmap <F14> :NERDTreeToggle<Enter>
-imap <F14> <esc>:NERDTreeToggle<Enter>
-
-" python macros
-command Ipdb execute ":normal oimport ipdb; ipdb.set_trace()<ESC>"
-nmap <C-b> :Ipdb<Enter> 
-
-" Go shortcuts
-nmap <F5> :Fmt<Enter>
-imap <F5> <esc>:Fmt<Enter>
-
-"autocmd FileType go compiler golang
-
-set backupdir=/Users/deanelbaz/vimtmp
-set directory=/Users/deanelbaz/vimtmp
+"Golang
+let g:go_fmt_command = "goimports"
+au Filetype go nnoremap <leader>v :vsp <CR>:exe "GoDef" <CR>
+au Filetype go nnoremap <leader>l :GoMetaLinter <CR>
+au Filetype go nnoremap <leader>d :GoDoc <CR>

@@ -1,0 +1,3 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =1
+let g:netrw_dirhist_1='/Users/deanelbaz/go/src/github.com/graymeta/mf2/magnets/audio_previews'
